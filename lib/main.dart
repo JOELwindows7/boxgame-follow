@@ -16,7 +16,6 @@ Future<void> main() async {
   flameUtil.fullScreen();
   flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-
 //  BoxGame game = BoxGame();
 //  TapGestureRecognizer tapper = TapGestureRecognizer();
 //  tapper.onTapDown = game.onTapDown;
@@ -67,6 +66,7 @@ class StartScaffold extends StatelessWidget {
             RaisedButton(
               onPressed: () {
                 // https://stackoverflow.com/questions/45109557/flutter-how-to-programmatically-exit-the-app
+                // https://api.flutter.dev/flutter/services/SystemNavigator/pop.html
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               },
               child: Row(
