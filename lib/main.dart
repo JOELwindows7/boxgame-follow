@@ -1,4 +1,5 @@
 import 'package:boxgame/Scaffoldings.dart';
+import 'package:boxgame/game-selector-hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
@@ -12,9 +13,7 @@ import 'box-game.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Util flameUtil = Util();
-  flameUtil.fullScreen();
-  flameUtil.setOrientation(DeviceOrientation.portraitUp);
+  setupFlameNow();
 
 //  BoxGame game = BoxGame();
 //  TapGestureRecognizer tapper = TapGestureRecognizer();
@@ -23,6 +22,12 @@ Future<void> main() async {
 //  flameUtil.addGestureRecognizer(tapper);
 
   runApp(StartPoint());
+}
+
+Future setupFlameNow() async{
+  Util flameUtil = Util();
+  flameUtil.fullScreen();
+  flameUtil.setOrientation(DeviceOrientation.portraitUp);
 }
 
 class StartPoint extends StatelessWidget {
@@ -52,7 +57,8 @@ class StartScaffold extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => containsScaffold()
+                      builder: (context) => GameHubScaffold(),
+                      //builder: (context) => containsScaffold(),
                   ),
                 );
               },
