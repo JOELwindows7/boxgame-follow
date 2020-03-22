@@ -63,7 +63,7 @@ class _KhochocTimedState extends State<KhochocTimed> {
     'Press Play on Bottom right button!',
     'Get Ready',
     'Khochoc Now!',
-    'Time\'s up!',
+    'Time\'s up! Press Play button on bottom right to play again.',
   ];
   String KhochocSays = 'Press Play on bottom right button!';
 
@@ -127,7 +127,7 @@ class _KhochocTimedState extends State<KhochocTimed> {
     });
 
     sub.onDone((){
-      print('Init Countdown Done!');
+      print('Game Countdown Done! Player got ${KhochocCoin}');
       sub.cancel();
       StopGame();
     });
