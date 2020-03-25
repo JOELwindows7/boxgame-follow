@@ -27,10 +27,14 @@ https://stackoverflow.com/a/54611581/9079640
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path/path.dart';
 import 'package:shake/shake.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:quiver/async.dart';
+import 'package:sqflite/sqflite.dart';
+
+import 'KhochocHighscore.dart';
 
 class KhochocTimed extends StatefulWidget {
   @override
@@ -46,6 +50,77 @@ class _KhochocTimedState extends State<KhochocTimed> {
   int KhochocCoin = 0;
   ShakeDetector detector;
   Color bekgronColor = Colors.white;
+
+  /*
+  Databaser
+   */
+  var NumberOfSessions;
+  var database;
+  void DatabasereInit() async{
+    setState(() {
+
+    });
+    database = openDatabase(
+      join(await getDatabasesPath(), 'KhochocLogs.db'),
+      version: 1,
+      onCreate: (db,version){
+        return db.execute(
+          "CREATE TABLE Khochoc(id INTEGER PRIMARY KEY, khochocNumbers INTEGER, date String)",
+        );
+      },
+    );
+  }
+
+  Future<void> insertKhochocLog(KhochocLogs log) async{
+    final Database db = await database;
+
+    await db.insert(
+      'Khochoc',
+      log.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateKhochoc(KhochocLogs log) async{
+    final db = await database;
+
+    await db.update(
+      'Khochoc',
+      log.toMap(),
+      where: 'id: ?',
+      whereArgs: [log.id]
+    );
+  }
+
+  Future<int> lastKhochocSession() async{
+    var records = await database.query('Khochoc');
+    var mapRead = records.last;
+    KhochocLogs dataRead = KhochocLogs(
+      id: mapRead['id'],
+      khochocNumbers: mapRead['khochocNumbers'],
+      date: mapRead['date'],
+    );
+    return dataRead.id;
+  }
+
+  KhochocLogs logging = KhochocLogs(
+    id: 0,
+    khochocNumbers: 0,
+    date: '',
+  );
+
+
+
+  Future<void> submitScore() async{
+    final db = await database;
+
+    insertKhochocLog(logging);
+  }
+
+  Future<void> closeDatabase() async{
+    await database.close();
+  }
+  //DataBaser end
 
   void SnakBar(String text, String actionLabel){
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -138,14 +213,27 @@ class _KhochocTimedState extends State<KhochocTimed> {
       bekgronColor = Colors.white;
       isStartedGame = false;
       KhochocSays = KhochocWords.elementAt(3);
+      logging = KhochocLogs(
+        khochocNumbers: KhochocCoin,
+        id: NumberOfSessions,
+        date: TimeOfDay.now().toString(),
+      );
+
+      NumberOfSessions++;
     });
     BerhentiKhochoc();
+    submitScore();
     SnakBar('You\'ve got ${KhochocCoin} 💰 Coins!', 'WOW!');
   }
 
   void initState(){
+    NumberOfSessions = 0;
+    DatabasereInit();
     KhochocSays = KhochocWords.elementAt(0);
     super.initState();
+    setState(() {
+      NumberOfSessions = lastKhochocSession();
+    });
 //    detector = ShakeDetector.autoStart(onPhoneShake: (){
 //      setState(() {
 //        if(isStartedGame) KhochocCoin++;
@@ -168,6 +256,7 @@ class _KhochocTimedState extends State<KhochocTimed> {
             Fluttertoast.showToast(msg: 'You got $KhochocCoin 💰 Coins!');
             detector.stopListening();
             Navigator.pop(context);
+            closeDatabase();
           },
         ),
         actions: <Widget>[
