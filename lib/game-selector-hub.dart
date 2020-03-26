@@ -7,6 +7,8 @@ import 'package:boxgame/notFoundError.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'KhochocHighscore.dart';
+
 /*
 * Game Selector
 * Select Game!
@@ -57,6 +59,7 @@ class _GameListState extends State<GameList> {
     DaftarGame(Icons.all_inclusive, 'Achak Achak'),
     DaftarGame(Icons.vibration, 'Khochoc Khochoc!'),
     DaftarGame(Icons.vibration, 'Khochoc Timed!'),
+    DaftarGame(Icons.score, 'Khochoc Highscore'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -87,6 +90,9 @@ class _GameListState extends State<GameList> {
                     break;
                   case 5:
                     return KhochocTimed();
+                    break;
+                  case 6:
+                    return KhochocHighScore();
                     break;
                   default:
                     return NotFoundError();
