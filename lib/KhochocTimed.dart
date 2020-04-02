@@ -207,7 +207,7 @@ class _KhochocTimedState extends State<KhochocTimed> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    '${_timerCurrent}',
+                    '${_timerCurrent} 🕒',
                     style: TextStyle(
                       fontSize: 24.0,
                       fontStyle: FontStyle.italic,

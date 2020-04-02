@@ -1,5 +1,6 @@
 import 'package:boxgame/Khochoc.dart';
 import 'package:boxgame/KhochocTimed.dart';
+import 'package:boxgame/RoffSkets.dart';
 import 'package:boxgame/ah-pusing.dart';
 import 'package:boxgame/flutter-box2D.dart';
 import 'package:boxgame/main.dart';
@@ -60,6 +61,7 @@ class _GameListState extends State<GameList> {
     DaftarGame(Icons.vibration, 'Khochoc Khochoc!'),
     DaftarGame(Icons.vibration, 'Khochoc Timed!'),
     DaftarGame(Icons.score, 'Khochoc Highscore'),
+    DaftarGame(Icons.redeem, 'OurWear Roff Skets'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -93,6 +95,9 @@ class _GameListState extends State<GameList> {
                     break;
                   case 6:
                     return KhochocHighScore();
+                    break;
+                  case 7:
+                    return OurWearRoffSkets();
                     break;
                   default:
                     return NotFoundError();
